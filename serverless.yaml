@@ -1,0 +1,29 @@
+service: dogtorapi
+
+plugins:
+  - 'serverless-express'
+  - 'serverless-auto-swagger'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  httpApi:
+    cors: true
+functions:
+  main:
+    handler: dist/main.handler
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: '{proxy+}'
+custom:
+    autoswagger:
+        apiKeyHeaders: ['Authorization', 'bearer token']
+        useStage: true
+        basePath: '/api'
+        schemes: ['http', 'https', 'ws', 'wss']
+        useRedirectUI: true
